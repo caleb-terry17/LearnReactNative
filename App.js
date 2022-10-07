@@ -1,28 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';  // npm install react-native-element-dropdown --save
 
 export default function App() {
-    const buoyState = useState(null);
+    const buoyState = useState(0);
     const ropeLengthState = useState(null);
     const boatSpeedState = useState(null);
 
     function computeTotalBuoys() {
-        return buoyState[0] + 6 * (ropeLengthState[0] + boatSpeedState[0]);
+        if (parseFloat(buoyState[0]).toString() == "NaN") {
+            return 0;
+        }
+        return parseFloat(buoyState[0]) + 6 * (ropeLengthState[0] + boatSpeedState[0]);
     }
 
     return (
         <View style={styles.container}>
             <TextInput
+                style={styles.input}
+                placeholder="Buoys"
+                onChangeText={(count) => buoyState[1](count)}
+                textAlign="center"
                 editable
                 keyboardType='numeric'
-            />
-
-            <DropDownMenu 
-                placeHolder="Buoys" 
-                data={buoys}
-                state={buoyState}
             />
 
             <DropDownMenu 
@@ -37,41 +37,14 @@ export default function App() {
                 state={boatSpeedState}
             />
 
-            <Text style={styles.text}>{computeTotalBuoys()}</Text>
+            <Text 
+                style={styles.text}
+            >
+                {computeTotalBuoys()} Buoys
+            </Text>
         </View>
     );
 }
-
-let buoys = [
-    {
-        label: "0 Buoy",
-        value: 0,
-    },
-    {
-        label: "1 Buoy",
-        value: 1,
-    },
-    {
-        label: "2 Buoy",
-        value: 2,
-    },
-    {
-        label: "3 Buoy",
-        value: 3,
-    },
-    {
-        label: "4 Buoy",
-        value: 4,
-    },
-    {
-        label: "5 Buoy",
-        value: 5,
-    },
-    {
-        label: "6 Buoy",
-        value: 6,
-    },
-];
 
 let ropeLengths = [
     {
@@ -167,17 +140,11 @@ let boatSpeeds = [
     },
 ];
 
-{/* <View style={styles.container}>
-      <Text style={styles.text}>Hello world!</Text>
-      <Text style={styles.text}>yoooooo!</Text>
-      <DropDownMenu/>
-      <StatusBar style="auto" />
-    </View> */}
-
 const DropDownMenu = (props) => {
     return (
         <Dropdown
             style={styles.dropdown}
+            activeColor="#777"
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -196,42 +163,49 @@ const DropDownMenu = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-  },
-  textContainer: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    alignContent: "center",
-    justifyContent: 'center',
-  },
-  text: {
-    color: "#000",
-  },
-  dropdown: {
-    margin: 16,
-    height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    backgroundColor: "#FFF",
-  },
-  icon: {
-    marginRight: 5,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
+    container: {
+        padding: 50,
+        flex: 1,
+        backgroundColor: '#FFF',
+        justifyContent: 'top',
+    }, 
+    text: {
+        color: "#000",
+        fontSize: 50,
+        textAlign: "center",
+    },
+    dropdown: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#FFF",
+        paddingHorizontal: 20,
+        borderWidth: 1,
+        borderColor: "#000",
+        borderRadius: 8,
+    },
+    icon: {
+        marginRight: 5,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+    },
+    iconStyle: {
+        width: 20,
+        height: 20,
+    },
+    inputSearchStyle: {
+        height: 40,
+        fontSize: 16,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#000",
+        borderRadius: 8,
+        padding: 8,
+        margin: 10,
+        width: 100,
+    },
 });
